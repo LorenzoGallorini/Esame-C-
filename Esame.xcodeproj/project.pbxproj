@@ -23,8 +23,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4FB4BCCD242BBE010091723E /* AlberoBinariodiRicerca.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlberoBinariodiRicerca.h; sourceTree = "<group>"; usesTabs = 1; };
 		4FDA65A624290CA30048CFD5 /* Esame */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Esame; sourceTree = BUILT_PRODUCTS_DIR; };
-		4FDA65A924290CA30048CFD5 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		4FDA65A924290CA30048CFD5 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; usesTabs = 1; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +58,7 @@
 		4FDA65A824290CA30048CFD5 /* Esame */ = {
 			isa = PBXGroup;
 			children = (
+				4FB4BCCD242BBE010091723E /* AlberoBinariodiRicerca.h */,
 				4FDA65A924290CA30048CFD5 /* main.cpp */,
 			);
 			path = Esame;
