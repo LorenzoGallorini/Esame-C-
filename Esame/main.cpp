@@ -15,13 +15,13 @@ bool foo(int a) {
     if(a>20)return true;else return false;
 }
 
-struct compare_int {
+struct compara_int {
 	bool operator()(int a, int b) const {
 		return a<b;
 	}
 };
 		
-struct equal_int {
+struct uguale_int {
 			bool operator()(int a, int b) const {
 				return a==b;
 			}
@@ -30,7 +30,7 @@ struct equal_int {
 
 void TestAddRemovePrint()
 {
-	ABR<int,compare_int,equal_int> Albero;
+	ABR<int,compara_int,uguale_int> Albero;
 	Albero.Add(20);
 	Albero.Remove(20);
 	Albero.Add(20);
@@ -61,7 +61,7 @@ void TestAddRemovePrint()
 }
 void TestSubTreeCount()
 {
-	ABR<int,compare_int,equal_int> Albero;
+	ABR<int,compara_int,uguale_int> Albero;
 	Albero.Add(20);
     Albero.Add(15);
     Albero.Add(25);
@@ -71,8 +71,8 @@ void TestSubTreeCount()
 	Albero.Add(19);
 	Albero.Add(24);
 	Albero.Add(26);
-	ABR<int,compare_int,equal_int> SottoAlbero = Albero.SubTree(15);
-	ABR<int,compare_int,equal_int> SottoAlbero2 = Albero.SubTree(24);
+	ABR<int,compara_int,uguale_int> SottoAlbero = Albero.SubTree(15);
+	ABR<int,compara_int,uguale_int> SottoAlbero2 = Albero.SubTree(24);
 	std::cout<<Albero.Count()<<std::endl;
 	std::cout<<SottoAlbero<<std::endl;
 	
@@ -80,7 +80,7 @@ void TestSubTreeCount()
 
 void TestCasiLimite()
 {
-	ABR<int,compare_int,equal_int> Albero;
+	ABR<int,compara_int,uguale_int> Albero;
 	try{
 		Albero.MinimumValue();
 	}
@@ -121,7 +121,7 @@ void TestCasiLimite()
 		std::cout << e.error_cod <<std::endl;
 	}
 	try{
-		ABR<int,compare_int,equal_int> Test = Albero.SubTree(100);
+		ABR<int,compara_int,uguale_int> Test = Albero.SubTree(100);
 	}
 	catch(Elemento_non_trovato_exception e)
 	{
@@ -132,17 +132,18 @@ int main(int argc, const char * argv[]) {
 
 	#pragma region CodeBaseTesting
 	
-	ABR<int,compare_int,equal_int> T;
+	ABR<int,compara_int,uguale_int> T;
 	T.Add(20);
 	T.Add(15);
-	T.Add(25);
 	T.Add(10);
 	T.Add(17);
 	T.Add(30);
-	ABR<int,compare_int,equal_int> TC;
+	cout << T << endl;
+	ABR<int,compara_int,uguale_int> TC;
 	TC=T;
-	ABR<int,compare_int,equal_int> TCo(T);
+	ABR<int,compara_int,uguale_int> TCo(T);
 	T.Remove(25);
+	ABR<int,compara_int,uguale_int> TCT(4);
 	
 	std::cout << T <<std::endl;
 	std::cout << TC <<std::endl;
@@ -155,9 +156,6 @@ int main(int argc, const char * argv[]) {
 	TestCasiLimite();
 	
 	#pragma endregion CodeBaseTesting
-	#pragma region SpecBaseTesting
-	
-	#pragma endregion SpecBaseTesting
     
 	return 0;
 }
