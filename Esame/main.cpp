@@ -69,6 +69,29 @@ std::ostream &operator<<(std::ostream &os, const square &p) {
 bool foosquare(square a) {
     if(a._l>=5)return true;else return false;
 }
+void StampaErrore(int ErrorCode)
+{
+	string Errore;
+	switch (ErrorCode) {
+		case -1:
+			Errore="Elemento già inserito";
+			break;
+		case -2:
+			Errore="Elemento non trovato";
+			break;
+		case -3:
+			Errore="Albero non inizializzato";
+			break;
+		case -4:
+			Errore="New Nodo Bad Alloc";
+			break;
+		default:
+			Errore="Errore Sconosciuto";
+			break;
+	}
+	cerr << Errore << endl;
+}
+
 typedef ABR<square,compare_square,equals_square> AlberoQuadrato;
 void SquareTest()
 {
@@ -199,14 +222,14 @@ void TestCasiLimite()
 	}
 	catch(Albero_non_inizializzato_Exception e)
 	{
-		cout << e.error_cod <<endl;
+		StampaErrore(e.error_cod);
 	}
 	try{
 		Albero.Remove(20);
 	}
 	catch(Albero_non_inizializzato_Exception e)
 	{
-		cout << e.error_cod <<endl;
+		StampaErrore(e.error_cod);
 	}
 	Albero.Add(20);
 	try{
@@ -214,7 +237,7 @@ void TestCasiLimite()
 	}
 	catch(Elemento_gia_inserito_exception e)
 	{
-		cout << e.error_cod <<endl;
+		StampaErrore(e.error_cod);
 	}
     Albero.Add(15);
     Albero.Add(25);
@@ -231,14 +254,14 @@ void TestCasiLimite()
 	}
 	catch(Elemento_non_trovato_exception e)
 	{
-		cout << e.error_cod <<endl;
+		StampaErrore(e.error_cod);
 	}
 	try{
 		ABR<int,compara_int,uguale_int> Test = Albero.SubTree(100);
 	}
 	catch(Elemento_non_trovato_exception e)
 	{
-		cout << e.error_cod <<endl;
+		StampaErrore(e.error_cod);
 	}
 }
 // Deve essere possibile per l’utente scegliere la strategia usata per confrontare due dati T
