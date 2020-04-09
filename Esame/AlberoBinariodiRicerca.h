@@ -4,14 +4,15 @@
 //
 //  Created by Lorenzo Gallorini on 23/03/2020.
 //  Copyright © 2020 Lorenzo Gallorini. All rights reserved.
-//  tar -cvzf Prova.tar.gz Prova
 //
 
 #ifndef AlberoBinariodiRicerca_h
 #define AlberoBinariodiRicerca_h
 #include <ostream>
 #include <cstddef>
-#include <iterator> 
+#include <iterator>
+
+
 /**
 	@brief Eccezione custom di un elemento già inserito Error cod = -1;
 */
@@ -21,7 +22,7 @@ public:
 	Elemento_gia_inserito_exception():error_cod(-1){}
 };
 /**
-	@brief Eccezione custom se non trovo l'elemento Error cod = -2;
+	*@brief Eccezione custom se non trovo l'elemento Error cod = -2;
 */
 class Elemento_non_trovato_exception {
 public:
@@ -29,7 +30,7 @@ public:
 	Elemento_non_trovato_exception():error_cod(-2){}
 };
 /**
-	@brief Eccezione custom se non trovo l'elemento Error cod = -2;
+	*@brief Eccezione custom se non trovo l'elemento Error cod = -2;
 */
 class Albero_non_inizializzato_Exception {
 public:
@@ -37,33 +38,48 @@ public:
 	Albero_non_inizializzato_Exception():error_cod(-3){}
 };
 /**
-    Questa Classe implementa un albero binario di ricerca di dati generici T.
-    @brief Albero Binario di ricerca
+	*@brief Eccezione custom di un elemento non inserito adeguatamente
+*/
+class New_Nodo_Bad_Alloc_Exception {
+public:
+	int error_cod;
+	New_Nodo_Bad_Alloc_Exception():error_cod(-4){}
+};
+/**
+    *Questa Classe implementa un albero binario di ricerca di dati generici T.
+    *@brief Albero Binario di ricerca
+	*@param T tipo del dato
+	*@param C funtore di comparazione (<) di due dati
+	*@param D funtore di comparazione (==) di due dati
 */
 template <typename T,typename C,typename D>
 class ABR{
-/**
-    Vado a dichiarare una struttura di supporto che rappresenterà tutti i nodi del nostro albero.
-    @brief Nodo dell'albero
- */
+	/**
+    	*Vado a dichiarare una struttura di supporto che rappresenterà tutti i nodi del nostro albero.
+   		*@brief Nodo dell'albero
+ 	*/
     struct Nodo{
         T Val;   ///< Il valore del nodo
         Nodo *L; ///< Il figlio sinistro del nodo
         Nodo *R; ///< Il figlio destro del nodo
 		Nodo *P; ///<Il padre del nodo
+		/**
+            *Costruttore di default      
+         */ 
+        Nodo(): R(nullptr),L(nullptr),P(nullptr){}
         /**
-            Costruttore primario che inizializza il nodo.
-            Ho deciso di utilizzare questo come costruttore primario perchè all'interno dell'albero
-            non credo abbia senso ci siano dei Nodi senza valore.
-            @param v  costante valore del dato
+            *Costruttore primario che inizializza il nodo.
+            *Ho deciso di utilizzare questo come costruttore primario perchè all'interno dell'albero
+            *non credo abbia senso ci siano dei Nodi senza valore.
+            *@param v  costante valore del dato
         */
         Nodo(const T &v)
             : Val(v) , L(nullptr),R(nullptr),P(nullptr) {}
 		/**
-			Costruttore primario che inizializza il nodo.
-			Ho deciso di utilizzare questo come costruttore primario perchè all'interno dell'albero
-			non credo abbia senso ci siano dei Nodi senza valore.
-			@param v  costante valore del dato
+			*Costruttore primario che inizializza il nodo.
+			*Ho deciso di utilizzare questo come costruttore primario perchè all'interno dell'albero
+			*non credo abbia senso ci siano dei Nodi senza valore.
+			*@param v  costante valore del dato
 		*/
 		Nodo(const T &v,Nodo *Pa)
 			: Val(v) , L(nullptr),R(nullptr),P(Pa) {}
@@ -80,9 +96,9 @@ class ABR{
 	C _Minore;
 	D _Uguali;
     /**
-    	Algoritmo ricorsivo di appoggio da richiamare nel distruttore per eliminare l'albero.
-		L'algoritmo prende in input un nodo e ricorsivamente elimina tutti quelli sottostanti.
-    	@param SubRoot di tipo puntatore a Nodo;
+    	*Algoritmo ricorsivo di appoggio da richiamare nel distruttore per eliminare l'albero.
+		*L'algoritmo prende in input un nodo e ricorsivamente elimina tutti quelli sottostanti.
+    	*@param SubRoot di tipo puntatore a Nodo;
     */
     void DeleteAlberoR(Nodo *SubRoot)
     {
@@ -100,6 +116,7 @@ class ABR{
 		Algoritmo ricorsivo di appoggio da richiamare nel metodo Count per contare gli elementi dell'albero.
 		Ho deciso di implentarlo così per poter avere sempre il numero di elementi senza tenere una variabile di appoggio.
 		@param SubRoot di tipo puntatore a Nodo;
+		@return un intero positivo
     */
     unsigned int CountR(const Nodo *SubRoot) const
     {
@@ -115,7 +132,7 @@ class ABR{
 		@param Value di Tipo T
 		@return il nodo corrispondente al valore
     */
-	Nodo* GetNodo(const T Value)
+	Nodo* GetNodo(const T &Value)
 	{
 		Nodo *Ricerca = _Root;
 		while (Ricerca != nullptr)
@@ -132,65 +149,74 @@ class ABR{
 	 *@param Partenza di Tipo puntatore a Nodo
 	 *@return T ritorna il valore minimo dell'albero sottostante a partenza
     */
-	T ValoreMinimo(Nodo *Partenza)
+	T ValoreMinimo(Nodo *Partenza) const
 	{
 		while (Partenza->L != nullptr)
 			Partenza = Partenza->L;
 		return Partenza->Val;
 	}
 	/**
-	 *Metodo GeneraAlbero  per popolare un albero partendo da un nodo di un altro albero
-	 *@param SubRoot di Tipo puntatore a Nodo
-	 *@param Albero di tipo ABR
-    */
-	void GeneraAlbero(ABR &Albero, const Nodo *SubRoot)
+	 * metodo che popola l'albero ricorsivamente
+	 * @param SubRoot di tipo puntatore a nodo
+	 */
+	void PopolaAlberoR(const Nodo *SubRoot)
 	{
-		Albero.Add(SubRoot->Val);
-        if (SubRoot->L != nullptr)
-            GeneraAlbero(Albero,SubRoot->L);
-        if(SubRoot->R != nullptr)
-            GeneraAlbero(Albero,SubRoot->R);
-	}
-	void PopolaAlbero(const Nodo *SubRoot)
-	{
-		Add(SubRoot->Val);
-        if (SubRoot->L != nullptr)
-            PopolaAlbero(SubRoot->L);
-        if(SubRoot->R != nullptr)
-            PopolaAlbero(SubRoot->R);
+		if (SubRoot != nullptr) {
+			Add(SubRoot->Val);
+			if (SubRoot->L != nullptr)
+				PopolaAlberoR(SubRoot->L);
+			if(SubRoot->R != nullptr)
+				PopolaAlberoR(SubRoot->R);
+		}
 	}
 public:
 	
 	/**
      *Costruttore di Default classe ABR (Albero Binario di Ricerca)
-     *Ho deciso di scrivere il costrutture per la funzione SubTree
     */
     ABR() : _Root(nullptr) {}
     /**
      *Costruttore della classe ABR (Albero Binario di Ricerca)
-     *Ho deciso di scrivere il costrutture in questa maniera obbligando il passaggio di un valore
-     *Perchè l'albero deve avere almeno la radice
      *@param value di Tipo T
+	 *@throw New_Nodo_Bad_Alloc_Exception In caso si verifichi un errore in fase di creazione di un nodo
     */
-    ABR(const T value) : _Root(new Nodo(value)) {}
+	ABR(const T &value){
+		try
+		{
+			_Root = new Nodo(value);
+		}
+		catch(...)
+		{
+			_Root = nullptr;
+			throw New_Nodo_Bad_Alloc_Exception();
+		}
+	}
 	/**
-		Costruttore di copia
-
-		@param other Albero da copiare
+		*Costruttore di copia
+		*@param other Albero da copiare
+	 	*@throw New_Nodo_Bad_Alloc_Exception
 	*/
-	ABR(const ABR &other) : _Root(nullptr) { PopolaAlbero(other._Root); }
+	ABR(const ABR& other) : _Root(nullptr) {
+		try
+		{
+			PopolaAlberoR(other._Root);
+		}
+		catch(...)
+		{
+			DeleteAlberoR(_Root);
+			throw New_Nodo_Bad_Alloc_Exception(); //lancio ancora throw
+		}
+	}
 	/**
 		Operatore di assegnamento
-		
 		@param other lista da copiare
-		@return reference a this
-
+		@return puntatore a this
 		@throw eccezione di allocazione di memoria
 	*/
 	ABR &operator=(const ABR &other) {
-		if(this != &other) {
+		if( this != &other) {
 			ABR tmp(other);
-			std::swap(_Root,tmp._Root);
+				std::swap(_Root,tmp._Root);
 		}
 		return *this;
 	}
@@ -204,16 +230,26 @@ public:
     /**
      *Metodo Add per aggiungere un elemento all'albero
 	 *Nel caso l'albero sia vuoto imposta la radica con quel nodo
-	 **@throw Elemento_gia_inserito_exception In caso si passa un valore già presente nell'albero
+	 *@throw Elemento_gia_inserito_exception In caso si passa un valore già presente nell'albero
+	 *@throw New_Nodo_Bad_Alloc_Exception In caso si verifichi un errore in fase di creazione di un nodo
      *@param Value di Tipo T
     */
-    void Add(const T Value)
+    void Add(const T &Value)
     {
         if(Find(Value))
 			throw Elemento_gia_inserito_exception();
         Nodo *AddN = _Root;
         Nodo *Padre = _Root;
-        bool isLeft=true;
+		Nodo *Nuovo ;
+		try{
+			 Nuovo = new Nodo(Value);
+		}
+		catch(...)
+		{
+			Nuovo = nullptr;
+			throw New_Nodo_Bad_Alloc_Exception();
+		}
+		bool isLeft=true;
 		if (Padre != nullptr)
 		{
 			while (AddN != nullptr)
@@ -231,13 +267,14 @@ public:
 					AddN = AddN->R;
 				}
 			}
+			Nuovo->P = Padre;
 			if (isLeft)
-				Padre->L = new Nodo(Value,Padre);
+				Padre->L = Nuovo;
 			else
-				Padre->R = new Nodo(Value,Padre);
+				Padre->R = Nuovo;
 		}
 		else
-			_Root = new Nodo(Value);
+			_Root = Nuovo;
     }
     /**
      *Metodo Remove per rimuovere un elemento all'albero.
@@ -249,67 +286,64 @@ public:
 	 *@throw Albero_non_inizializzato_Exception In caso viene chiamato un albero non inizializzato
 	 *@throw Elemento_non_trovato_exception In caso si passa un valore non presente nell'albero
     */
-	void Remove(const T Value)
+	void Remove(const T &Value)
 	{
 		if (_Root == nullptr)
 			throw Albero_non_inizializzato_Exception();
-		Nodo *root=_Root;
-		Nodo *curr = GetNodo(Value);
-		if (curr == nullptr)
+		Nodo *Root=_Root;
+		Nodo *Current = GetNodo(Value);
+		if (Current == nullptr)
 			throw Elemento_non_trovato_exception();
-		Nodo *parent = curr->P;
+		Nodo *Padre = Current->P;
 		//Caso 1: Nodo Foglia
-		if (curr->L == nullptr && curr->R == nullptr)
+		if (Current->L == nullptr && Current->R == nullptr)
 		{
-			if (curr != root)//  Se il nodo da cancellare non è la Radice allora setto parent L/R to nullptr
+			if (Current != Root)//  Se il nodo da cancellare non è la Radice allora setto parent L/R to nullptr
 			{
-				if (parent->L == curr)
-					parent->L = nullptr;
+				if (Padre->L == Current)
+					Padre->L = nullptr;
 				else
-					parent->R = nullptr;
+					Padre->R = nullptr;
 			}
 			else // se l'albero ha solo la radice la cancella e la setta a null
 				_Root = nullptr;
 			// dealloco la memoria
-			delete curr;
-			curr=nullptr;
+			delete Current;
+			Current=nullptr;
 		}
 		//Case 2: Il Nodo ha entrambi i figli
-		else if (curr->L && curr->R)
+		else if (Current->L && Current->R)
 		{
-			
-			Nodo *successor  = GetNodo(ValoreMinimo(curr->R));// Trova il suo nodo succesore in-order
-			
-			int val = successor->Val;//Salva il valore del successore
+			Nodo *Successore  = GetNodo(ValoreMinimo(Current->R));// Trova il suo nodo succesore in-order
+			int val = Successore->Val;//Salva il valore del successore
 			// Ricorsivamente elimino il succesore
 			// Il successore avrà al massimo un figlio (Quello destro)
-			Remove(successor->Val);
-			curr->Val = val;// Copia il valore del successore nel nodo corrente
+			Remove(Successore->Val);
+			Current->Val = val;// Copia il valore del successore nel nodo corrente
 		}
 		//Case 3: Il Nodo ha un solo figlio
 		else
 		{
-			Nodo* child = (curr->L)? curr->L: curr->R;//Trova il nodo figlio
-			if (curr != root)// Se il nodo da cancellare non è la radice setto i figli del parent
+			Nodo* Figlio = (Current->L)? Current->L: Current->R;//Trova il nodo figlio
+			if (Current != Root)// Se il nodo da cancellare non è la radice setto i figli del parent
 			{
-				
-				if (curr == parent->L)
-					parent->L = child;
+				if (Current == Padre->L)
+					Padre->L = Figlio;
 				else
-					parent->R = child;
-				child->P=parent;
+					Padre->R = Figlio;
+				Figlio->P=Padre;
 			}
 			else
 			{
-				_Root = child;// Se il nodo da cancellare è la radice alla setto la radice con child
+				_Root = Figlio;// Se il nodo da cancellare è la radice alla setto la radice con child
 				_Root->P = nullptr;
 			}
-			delete curr; //Dealloco la memoria
+			delete Current; //Dealloco la memoria
 		}
 	}
     /**
      *Metodo Count che restituisce il numero di elementi dell'albero
-     *@return di tipo int
+     *@return intero positivo
     */
 	unsigned int Count() const { return CountR(_Root); }
     /**
@@ -317,7 +351,7 @@ public:
       *@param Value di tipo T
 	  *@return const bool
      */
-    bool Find(const T Value) const
+    bool Find(const T &Value) const
     {
 		Nodo *Ricerca = _Root;
 		while (Ricerca != nullptr)
@@ -334,22 +368,22 @@ public:
      *@param Value di tipo T
      *@return di tipo puntatore ABR
 	 *@throw Elemento_non_trovato_exception In caso si passa un valore non presente nell'albero
+	 *@throw New_Nodo_Bad_Alloc_Exception in caso non si riesca ad allocare un nodo
     */
-    ABR SubTree(T Value)
+    ABR SubTree(const T &Value)
 	{
 		if(!Find(Value))
 			throw Elemento_non_trovato_exception();
-		Nodo *Ricerca = _Root;
-		bool found = false;
-		while (Ricerca != nullptr && !found)
-			if(_Minore(Value,Ricerca->Val))
-				Ricerca = Ricerca->L;
-			else if(!_Uguali(Value,Ricerca->Val))
-				Ricerca = Ricerca->R;
-			else
-				found = true;
+		Nodo *Ricerca = GetNodo(Value);
 		ABR<T,C,D> newTree;
-		GeneraAlbero(newTree, Ricerca); //Funzione che popola l'albero.
+		try{
+		newTree.PopolaAlberoR(Ricerca); //Funzione che popola l'albero.
+		}
+		catch(...)
+		{
+			newTree.DeleteAlberoR(newTree._Root);
+			throw New_Nodo_Bad_Alloc_Exception();
+		}
 		return newTree;
 	}
 	/**
@@ -357,7 +391,7 @@ public:
      *@return di tipo T
 	 *@throw Albero_non_inizializzato_Exception In caso viene chiamato un albero non inizializzato
     */
-	T MinimumValue()
+	T MinimumValue() const
 	{
 		if (_Root == nullptr)
 			throw Albero_non_inizializzato_Exception();
@@ -365,7 +399,7 @@ public:
 	}
 	/**
 		Iteratore costante dell'Albero Binario di Ricerca
-		@brief Iteratore costante della lista
+		@brief Iteratore costante dell'albero
 	*/
 	class const_iterator {
 		const Nodo *_n;
@@ -380,7 +414,7 @@ public:
 		 */
 		const_iterator() : _n(nullptr) {}
 		/**
-		 *Metodo costruttore
+		 *Metodo costruttore di copia
 		 *@param other di tipo const const_iterator
 		 */
 		const_iterator(const const_iterator &other) : _n(other._n) {
@@ -390,7 +424,7 @@ public:
 		*@param t di tipo const ABR<T>
 		*/
 		const_iterator(const ABR<T,C,D>* t){
-			_n= inorderFirst(t->_Root);
+			_n= AllLeft(t->_Root);
 		}
 		/**
 		 **Ridefinizione dell'operatore =
@@ -487,7 +521,7 @@ public:
 		 *@param p di tipo puntatore a nodo.
 		 *@return puntatore a nodo.
 		 */
-		Nodo* inorderFirst( Nodo *p ) {
+		Nodo* AllLeft( Nodo *p ) {
 			if (p!=nullptr)
 				while ( p->L != nullptr )
 					p = p->L;
@@ -495,12 +529,11 @@ public:
 		}
 	}; //Classe const_iterator
 	/**
-		Ritorna l'iteratore all'inizio della sequenza dati
-		@return iteratore all'inizio della sequenza
+		Ritorna l'iteratore con nodo più a sinistra dell'albero
+		@return iteratore
 	*/
 	const_iterator begin() const {
-		const_iterator app =const_iterator(this);
-		return app;
+		return const_iterator(this);
 	}
 	/**
 		Ritorna l'iteratore alla fine della sequenza dati
@@ -509,7 +542,7 @@ public:
 	const_iterator end() const {
 		return const_iterator();
 	}
-};
+}; ///class ABR
 /**
  *Funzione che stampa gli alberi che soddisfano un determinato predicato
  *@param Albero di tipo albero binario
