@@ -40,7 +40,85 @@ struct uguale_char {
 		return a==b;
 	}
 };
-	void TestCostruttoriOperator()
+
+struct square {
+   double _l;
+
+   square(): _l(0) {}
+
+   square(double l): _l(l) {}
+};
+struct equals_square {
+
+   bool operator()(const square &p1, const square &p2) const{
+      return (p1._l == p2._l);
+   }
+};
+struct compare_square {
+
+   bool operator()(const square &p1, const square &p2) const {
+	   return (p1._l < p2._l);
+   }
+};
+
+//stampa point
+std::ostream &operator<<(std::ostream &os, const square &p) {
+    os <<  p._l;
+    return os;
+}
+bool foosquare(square a) {
+    if(a._l>=5)return true;else return false;
+}
+typedef ABR<square,compare_square,equals_square> AlberoQuadrato;
+void SquareTest()
+{
+	AlberoQuadrato Albero;
+	square D(6);
+	Albero.Add(D);
+	square G(9);
+	Albero.Add(G);
+	square A(3);
+	Albero.Add(A);
+	square C(5);
+	Albero.Add(C);
+	square B(4);
+	Albero.Add(B);
+	square E(7);
+	Albero.Add(E);
+	square F(8);
+	Albero.Add(F);
+	
+	
+	square H(-1);
+	cout << endl;
+	//Di conoscere il numero totale di dati inseriti nell’albero;
+	assert(Albero.Count()==7);
+	cout<< Albero.Count() << endl;
+	cout << endl;
+	//Il controllo di esistenza un elemento T;
+	assert(Albero.Find(G));
+	cout << Albero.Find(G) << endl;
+	assert(!Albero.Find(H));
+	cout << Albero.Find(H) << endl;
+	/*Di accedere ai dati presenti nell’albero tramite un iteratore a sola lettura
+	e di tipo forward. L’ordine con il quale sono ritornati i dati non è
+	rilevante.*/
+	cout << endl;
+	typename AlberoQuadrato::const_iterator i,ie;
+	for(i=Albero.begin(),ie=Albero.end(); !(i==ie); ++i)
+		cout<<*i<<endl;
+	cout << endl;
+	//Di stampare il contenuto dell'albero (anche usando operator<<)
+	cout << Albero << endl;
+	/*Implementare inoltre un metodo subtree che, passato un dato d dello
+	stesso tipo del dato contenuto nell’albero, ritorna un nuovo albero. Il nuovo albero deve corrispondere al sottoalbero avente come radice il nodo con il valore d. Ad esempio l'esecuzione di B=A.subtree(8) potrebbe corrispondere alla situazione in figura:*/
+	AlberoQuadrato SubAlbero = Albero.SubTree(C);
+	cout << SubAlbero << endl;
+	/*Implementare una funzione globale printIF che dato un albero binario di tipo T, e un predicato P, stampa a schermo tutti i valori contenuti nell’albero che soddisfano il predicato.*/
+	PrintIF(Albero,foosquare);
+}
+
+void TestCostruttoriOperator()
 {
 	ABR<int,compara_int,uguale_int> T;
 	ABR<int,compara_int,uguale_int> TS = T;
@@ -224,5 +302,10 @@ int main(int argc, const char * argv[]) {
 	
 	#pragma endregion SpecBaseTesting
 	
+	#pragma region ClasseCustomTest
+	
+	SquareTest();
+	
+	#pragma endregion ClasseCustomTest
 	return 0;
 }
