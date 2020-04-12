@@ -61,7 +61,7 @@ struct compare_square {
    }
 };
 
-//stampa point
+//stampa square
 std::ostream &operator<<(std::ostream &os, const square &p) {
     os <<  p._l;
     return os;
