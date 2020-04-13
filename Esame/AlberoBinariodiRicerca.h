@@ -14,7 +14,7 @@
 
 
 /**
-	@brief Eccezione custom di un elemento già inserito Error cod = -1;
+	*@brief Eccezione custom di un elemento già inserito Error cod = -1;
 */
 class Elemento_gia_inserito_exception {
 public:
