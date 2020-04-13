@@ -63,7 +63,7 @@ struct compare_square {
 
 //stampa square
 std::ostream &operator<<(std::ostream &os, const square &p) {
-    os <<  p._l;
+    os << "Quadrato di lunghezza " << p._l;
     return os;
 }
 bool foosquare(square a) {
