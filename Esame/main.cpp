@@ -217,14 +217,16 @@ void TestSubTreeCount()
 void TestCasiLimite()
 {
 	ABR<int,compara_int,uguale_int> Albero;
-	try{
+	try
+	{
 		Albero.MinimumValue();
 	}
 	catch(Albero_non_inizializzato_Exception e)
 	{
 		StampaErrore(e.error_cod);
 	}
-	try{
+	try
+	{
 		Albero.Remove(20);
 	}
 	catch(Albero_non_inizializzato_Exception e)
@@ -232,7 +234,8 @@ void TestCasiLimite()
 		StampaErrore(e.error_cod);
 	}
 	Albero.Add(20);
-	try{
+	try
+	{
 		Albero.Add(20);
 	}
 	catch(Elemento_gia_inserito_exception e)
@@ -249,14 +252,16 @@ void TestCasiLimite()
 	Albero.Add(26);
 	cout << Albero.MinimumValue() << endl;
 	
-	try{
+	try
+	{
 		Albero.Remove(100);
 	}
 	catch(Elemento_non_trovato_exception e)
 	{
 		StampaErrore(e.error_cod);
 	}
-	try{
+	try
+	{
 		ABR<int,compara_int,uguale_int> Test = Albero.SubTree(100);
 	}
 	catch(Elemento_non_trovato_exception e)
