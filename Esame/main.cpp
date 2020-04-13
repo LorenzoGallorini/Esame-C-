@@ -67,7 +67,7 @@ std::ostream &operator<<(std::ostream &os, const square &p) {
     return os;
 }
 bool foosquare(square a) {
-    if(a._l>=5)return true;else return false;
+    return (a._l>=5);
 }
 void StampaErrore(int ErrorCode)
 {
@@ -110,8 +110,6 @@ void SquareTest()
 	Albero.Add(E);
 	square F(8);
 	Albero.Add(F);
-	
-	
 	square H(-1);
 	cout << endl;
 	//Di conoscere il numero totale di dati inseriti nell’albero;
