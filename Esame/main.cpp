@@ -219,7 +219,7 @@ void TestCasiLimite()
 	{
 		Albero.MinimumValue();
 	}
-	catch(Albero_non_inizializzato_Exception e)
+	catch(Albero_non_inizializzato_Exception &e)
 	{
 		StampaErrore(e.error_cod);
 	}
@@ -227,7 +227,7 @@ void TestCasiLimite()
 	{
 		Albero.Remove(20);
 	}
-	catch(Albero_non_inizializzato_Exception e)
+	catch(Albero_non_inizializzato_Exception &e)
 	{
 		StampaErrore(e.error_cod);
 	}
@@ -236,7 +236,7 @@ void TestCasiLimite()
 	{
 		Albero.Add(20);
 	}
-	catch(Elemento_gia_inserito_exception e)
+	catch(Elemento_gia_inserito_exception &e)
 	{
 		StampaErrore(e.error_cod);
 	}
@@ -248,13 +248,16 @@ void TestCasiLimite()
 	Albero.Add(19);
 	Albero.Add(24);
 	Albero.Add(26);
-	cout << Albero.MinimumValue() << endl;
+	
+	auto app=	Albero.MinimumValue();
+		
+	cout << app << endl;
 	
 	try
 	{
 		Albero.Remove(100);
 	}
-	catch(Elemento_non_trovato_exception e)
+	catch(Elemento_non_trovato_exception &e)
 	{
 		StampaErrore(e.error_cod);
 	}
@@ -262,7 +265,7 @@ void TestCasiLimite()
 	{
 		ABR<int,compara_int,uguale_int> Test = Albero.SubTree(100);
 	}
-	catch(Elemento_non_trovato_exception e)
+	catch(Elemento_non_trovato_exception &e)
 	{
 		StampaErrore(e.error_cod);
 	}

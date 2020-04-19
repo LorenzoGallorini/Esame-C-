@@ -132,7 +132,7 @@ class ABR{
 		@param Value di Tipo T
 		@return il nodo corrispondente al valore
     */
-	Nodo* GetNodo(const T &Value)
+	Nodo* GetNodo(const T &Value) const
 	{
 		Nodo *Ricerca = _Root;
 		while (Ricerca != nullptr)
@@ -149,7 +149,7 @@ class ABR{
 	 *@param Partenza di Tipo puntatore a Nodo
 	 *@return T ritorna il valore minimo dell'albero sottostante a partenza
     */
-	T ValoreMinimo(Nodo *Partenza) const
+	const T& ValoreMinimo(Nodo *Partenza) const
 	{
 		while (Partenza->L != nullptr)
 			Partenza = Partenza->L;
@@ -370,7 +370,7 @@ public:
 	 *@throw Elemento_non_trovato_exception In caso si passa un valore non presente nell'albero
 	 *@throw New_Nodo_Bad_Alloc_Exception in caso non si riesca ad allocare un nodo
     */
-    ABR SubTree(const T &Value)
+    ABR SubTree(const T &Value) const
 	{
 		if(!Find(Value))
 			throw Elemento_non_trovato_exception();
@@ -391,7 +391,7 @@ public:
      *@return di tipo T
 	 *@throw Albero_non_inizializzato_Exception In caso viene chiamato un albero non inizializzato
     */
-	T MinimumValue() const
+	const T& MinimumValue() const
 	{
 		if (_Root == nullptr)
 			throw Albero_non_inizializzato_Exception();
